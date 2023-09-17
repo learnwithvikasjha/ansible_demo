@@ -1,1 +1,8 @@
-
+---
+- name: printing hello world
+  hosts: all
+  tasks:
+    - name: ping centos servers
+      ping:
+    - name: Ping my windows workstation
+      win_ping:
