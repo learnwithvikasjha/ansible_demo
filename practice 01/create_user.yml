@@ -1,6 +1,8 @@
 ---
 - name: create a user
   hosts: centos_servers
+  gather_facts: no
+  become: yes
   tasks:
     - name: create a user called ansible
       user:
