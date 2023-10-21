@@ -1,0 +1,38 @@
+---
+- name: install required software
+  hosts: centos_servers
+  gather_facts: no
+  become: yes
+  vars:
+    software:
+      - git
+      - telnet
+      - httpd
+      - wget
+
+  tasks:
+    - name: install required softwares
+      package:
+        name: " {{ item }} "
+        state: present
+      loop: "{{ software }}"
+      register: output
+
+    - name: show output result
+      debug:
+        msg: "{{ ansible_host }} : {{ item.results }}"
+      loop: "{{ output.results }}"
+    
+    - name: Send email
+      mail:
+        host: smtp.hostinger.com
+        port: 587
+        username: email@itpanther.com
+        password: StrongP@ssword001
+        to: vijha1@mailinator.com
+        subject: "{{ ansible_host }} : {{ item.results }}"
+        body: "{{ ansible_host }} : {{ item }}"
+        secure: starttls
+        timeout: 10
+      delegate_to: 192.168.1.19
+      loop: "{{ output.results }}"
