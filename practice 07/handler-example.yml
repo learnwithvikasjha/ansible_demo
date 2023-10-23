@@ -20,3 +20,16 @@
       ansible.builtin.template:
         src: html.j2
         dest: /var/www/html/index.html
+      notify: html deployed
+
+  handlers:
+    - name: re-start httpd services
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+      listen: html deployed
+
+    - name: email notification
+      debug:
+        msg: "email sent"
+      listen: html deployed
